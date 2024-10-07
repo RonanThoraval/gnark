@@ -205,6 +205,8 @@ func (vk *VerifyingKey) readFrom(r io.Reader, raw bool) (int64, error) {
 		log.Printf("nbBytes_%v = %v\n",i, dec.BytesRead())
 	}
 
+	log.Printf("We are outside the loop")	
+
 	vk.PublicAndCommitmentCommitted = utils.Uint64SliceSliceToIntSliceSlice(publicCommitted)
 
 	log.Printf("nbCommitments = %v\n", nbCommitments)
