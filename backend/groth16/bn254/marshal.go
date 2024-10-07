@@ -208,6 +208,10 @@ func (vk *VerifyingKey) readFrom(r io.Reader, raw bool) (int64, error) {
 	log.Printf("nbCommitments = %v\n", nbCommitments)
 
 	vk.CommitmentKeys = make([]pedersen.VerifyingKey, nbCommitments)
+
+	log.Printf("nbCommitments after = %v\n", nbCommitments)
+
+
 	var n int64
 	for i := range vk.CommitmentKeys {
 		var (
