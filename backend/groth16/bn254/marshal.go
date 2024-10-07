@@ -197,10 +197,11 @@ func (vk *VerifyingKey) readFrom(r io.Reader, raw bool) (int64, error) {
 		&nbCommitments,
 	}
 
-	for _, v := range toDecode {
+	for i, v := range toDecode {
 		if err := dec.Decode(v); err != nil {
 			return dec.BytesRead(), err
 		}
+		log.Printf("nbBytes_%v = %v\n",i, dec.BytesRead())
 	}
 
 	vk.PublicAndCommitmentCommitted = utils.Uint64SliceSliceToIntSliceSlice(publicCommitted)
