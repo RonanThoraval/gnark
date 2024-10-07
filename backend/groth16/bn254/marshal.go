@@ -199,6 +199,7 @@ func (vk *VerifyingKey) readFrom(r io.Reader, raw bool) (int64, error) {
 
 	for i, v := range toDecode {
 		if err := dec.Decode(v); err != nil {
+			log.Printf("pb_%v = (%v,%v)\n",i, dec.BytesRead(), err)
 			return dec.BytesRead(), err
 		}
 		log.Printf("nbBytes_%v = %v\n",i, dec.BytesRead())
