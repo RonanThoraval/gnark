@@ -23,6 +23,7 @@ import (
 	"github.com/consensys/gnark-crypto/utils/unsafe"
 	"github.com/consensys/gnark/internal/utils"
 	"io"
+	"log"
 )
 
 // WriteTo writes binary encoding of the Proof elements to writer
@@ -203,6 +204,8 @@ func (vk *VerifyingKey) readFrom(r io.Reader, raw bool) (int64, error) {
 	}
 
 	vk.PublicAndCommitmentCommitted = utils.Uint64SliceSliceToIntSliceSlice(publicCommitted)
+
+	log.Printf("nbCommitments = %v\n", nbCommitments)
 
 	vk.CommitmentKeys = make([]pedersen.VerifyingKey, nbCommitments)
 	var n int64
