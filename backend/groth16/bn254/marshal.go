@@ -24,6 +24,9 @@ import (
 	"github.com/consensys/gnark/internal/utils"
 	"io"
 	"log"
+	"syscall"
+	new_unsafe "unsafe"
+	"errors"
 )
 
 // WriteTo writes binary encoding of the Proof elements to writer
@@ -210,6 +213,23 @@ func (vk *VerifyingKey) readFrom(r io.Reader, raw bool) (int64, error) {
 	vk.PublicAndCommitmentCommitted = utils.Uint64SliceSliceToIntSliceSlice(publicCommitted)
 
 	log.Printf("nbCommitments = %v\n", nbCommitments)
+	var sysInfo syscall.Sysinfo_t
+	err := syscall.Sysinfo(&sysInfo)
+	if err != nil {
+		return 0, err
+	}
+
+	nb_data_available := sysInfo.Freeram * uint64(sysInfo.Unit)
+
+	elementSize := uint64(new_unsafe.Sizeof(pedersen.VerifyingKey{}))
+	log.Printf("size of 1 element = %v\n", elementSize)
+	log.Printf("size of all elements = %v\n", elementSize * uint64(nbCommitments))
+	log.Printf("available place = %v\n", nb_data_available)	
+
+	if elementSize * uint64(nbCommitments) > nb_data_available {
+		return 0, errors.New("Not enough place")
+	}
+
 
 	vk.CommitmentKeys = make([]pedersen.VerifyingKey, nbCommitments)
 
